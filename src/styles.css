@@ -20,6 +20,13 @@ body {
   padding: 12px;
 }
 
+
+.layout-customer-window {
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .panel {
   background: #fff;
   border-radius: 12px;
