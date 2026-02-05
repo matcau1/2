@@ -10,10 +10,16 @@ export default function CustomerDetails({
   onEditEmployee,
   onDeleteEmployee,
   onCancelEmployeeEdit,
+  isLoading,
+  error,
 }) {
   return (
     <main className="panel details">
-      {selectedCustomer ? (
+      {isLoading ? (
+        <p className="empty">Загрузка данных...</p>
+      ) : error ? (
+        <p className="empty">{error}</p>
+      ) : selectedCustomer ? (
         <>
           <h2>{selectedCustomer.companyName}</h2>
           <p>ИНН: {selectedCustomer.inn}</p>
