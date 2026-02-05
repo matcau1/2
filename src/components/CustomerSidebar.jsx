@@ -7,6 +7,7 @@ export default function CustomerSidebar({
   editingCustomerId,
   setCustomerForm,
   setSelectedId,
+  onOpenCustomerWindow,
   onSubmitCustomer,
   onEditCustomer,
   onRemoveCustomer,
@@ -65,7 +66,14 @@ export default function CustomerSidebar({
       <div className="list">
         {customers.map((customer) => (
           <article key={customer.id} className={`customer-card ${customer.id === selectedId ? 'active' : ''}`}>
-            <button type="button" className="customer-link" onClick={() => setSelectedId(customer.id)}>
+            <button
+              type="button"
+              className="customer-link"
+              onClick={() => {
+                setSelectedId(customer.id);
+                onOpenCustomerWindow(customer.id);
+              }}
+            >
               <strong>{customer.companyName}</strong>
               <span>ИНН: {customer.inn}</span>
               <span className="badge">{customer.status}</span>

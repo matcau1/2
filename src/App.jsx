@@ -6,8 +6,11 @@ import { makeId } from './utils/id';
 import { loadCustomers, saveCustomers } from './utils/storage';
 
 export default function App() {
+  const customerIdFromUrl = new URLSearchParams(window.location.search).get('customerId');
+  const isCustomerWindow = Boolean(customerIdFromUrl);
+
   const [customers, setCustomers] = useState(loadCustomers);
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState(customerIdFromUrl);
   const [customerForm, setCustomerForm] = useState(EMPTY_CUSTOMER_FORM);
   const [editingCustomerId, setEditingCustomerId] = useState(null);
 
@@ -15,8 +18,8 @@ export default function App() {
   const [editingEmployeeId, setEditingEmployeeId] = useState(null);
 
   const selectedCustomer = useMemo(
-    () => customers.find((customer) => customer.id === selectedId) ?? null,
-    [customers, selectedId]
+    () => customers.find((customer) => customer.id === (isCustomerWindow ? customerIdFromUrl : selectedId)) ?? null,
+    [customers, customerIdFromUrl, isCustomerWindow, selectedId]
   );
 
   const persist = (next) => {
@@ -169,34 +172,44 @@ export default function App() {
     if (editingEmployeeId === employeeId) resetEmployeeForm();
   };
 
-  return (
-    <div className="layout">
-      <CustomerSidebar
-        customers={customers}
-        selectedId={selectedId}
-        customerForm={customerForm}
-        editingCustomerId={editingCustomerId}
-        setCustomerForm={setCustomerForm}
-        setSelectedId={setSelectedId}
-        onSubmitCustomer={onSubmitCustomer}
-        onEditCustomer={editCustomer}
-        onRemoveCustomer={removeCustomer}
-        onCancelCustomerEdit={resetCustomerForm}
-      />
+  const openCustomerWindow = (customerId) => {
+    const url = `${window.location.origin}${window.location.pathname}?customerId=${customerId}`;
+    window.open(url, '_blank', 'noopener');
+  };
 
-      <CustomerDetails
-        selectedCustomer={selectedCustomer}
-        employeeForm={employeeForm}
-        editingEmployeeId={editingEmployeeId}
-        setEmployeeForm={setEmployeeForm}
-        onUploadLogo={uploadLogo}
-        onAddFiles={addFiles}
-        onDeleteFile={deleteFile}
-        onSaveEmployee={saveEmployee}
-        onEditEmployee={editEmployee}
-        onDeleteEmployee={deleteEmployee}
-        onCancelEmployeeEdit={resetEmployeeForm}
-      />
+  return (
+    <div className={`layout ${isCustomerWindow ? 'layout-customer-window' : ''}`}>
+      {!isCustomerWindow && (
+        <CustomerSidebar
+          customers={customers}
+          selectedId={selectedId}
+          customerForm={customerForm}
+          editingCustomerId={editingCustomerId}
+          setCustomerForm={setCustomerForm}
+          setSelectedId={setSelectedId}
+          onOpenCustomerWindow={openCustomerWindow}
+          onSubmitCustomer={onSubmitCustomer}
+          onEditCustomer={editCustomer}
+          onRemoveCustomer={removeCustomer}
+          onCancelCustomerEdit={resetCustomerForm}
+        />
+      )}
+
+      {isCustomerWindow && (
+        <CustomerDetails
+          selectedCustomer={selectedCustomer}
+          employeeForm={employeeForm}
+          editingEmployeeId={editingEmployeeId}
+          setEmployeeForm={setEmployeeForm}
+          onUploadLogo={uploadLogo}
+          onAddFiles={addFiles}
+          onDeleteFile={deleteFile}
+          onSaveEmployee={saveEmployee}
+          onEditEmployee={editEmployee}
+          onDeleteEmployee={deleteEmployee}
+          onCancelEmployeeEdit={resetEmployeeForm}
+        />
+      )}
     </div>
   );
 }
