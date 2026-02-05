@@ -12,11 +12,11 @@
     "dev:full": "npm run dev:server & npm run dev"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mssql": "^11.0.1"
+    "mysql2": "^3.14.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",
