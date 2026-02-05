@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "dev:client": "vite",
-    "dev:server": "node server.js",
+    "dev:server": "node --env-file=.env server.js",
     "dev:full": "npm run dev:server & npm run dev"
   },
   "dependencies": {
